@@ -1,0 +1,23 @@
+---
+- name: set rkhunter settings
+  lineinfile: dest=/etc/default/rkhunter
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: "^DB_UPDATE_EMAIL", line: 'DB_UPDATE_EMAIL="true"' }
+    - { regexp: "^APT_AUTOGEN", line: 'APT_AUTOGEN="yes"' }
+- name: allow hidden dirs and files in rkhunter
+  lineinfile: dest=/etc/rkhunter.conf
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: "^ALLOWHIDDENDIR=/etc/.git$",
+        line: "ALLOWHIDDENDIR=/etc/.git" }
+    - { regexp: "^ALLOWHIDDENFILE=/etc/.gitignore",
+        line: "ALLOWHIDDENFILE=/etc/.gitignore" }
+    - { regexp: "^ALLOWHIDDENFILE=/etc/.etckeeper",
+        line: "ALLOWHIDDENFILE=/etc/.etckeeper" }
+- command: rkhunter --update
+  when: firstrun.changed
+- shell: rkhunter --propupd && rkhunter --checkall
+  when: firstrun.changed

@@ -1,0 +1,7 @@
+---
+debian_release: "{{ansible_distribution_release}}"
+zeyple: { keys_dir: /etc/zeyple/keys,
+          exec: /usr/local/bin/zeyple.py,
+          config: /etc/zeyple.conf,
+          log: /var/log/zeyple.log,
+          user: zeyple }

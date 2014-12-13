@@ -1,0 +1,42 @@
+---
+- lineinfile: dest=/tmp/resistencia.firstrun
+              regexp="ok"
+              line="ok"
+  register: firstrun
+- hostname: name="{{hostname}}"
+- include: sysctl.yml
+- include: apt.yml
+- include: git.yml
+- apt: name="{{item}}"
+  with_items:
+    - etckeeper
+    - vim-nox
+    - sudo
+    - selinux-basics
+    - selinux-policy-default
+    - auditd
+    - fail2ban
+    - logwatch
+    - rkhunter
+    - ufw
+    - haveged
+    - ntp
+    - ntpdate
+    - gnupg2
+    - python-gpgme
+    - postfix
+    - screen
+- include: admin.yml
+- include: sudo.yml
+- include: firewall.yml
+- include: harden.yml
+- include: audit.yml
+- include: rkhunter.yml
+- include: logwatch.yml
+- include: haveged.yml
+- include: bash.yml
+- include: ssh.yml
+- include: postfix.yml
+- include: zeyple.yml
+- include: selinux.yml
+- include: services.yml

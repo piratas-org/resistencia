@@ -1,0 +1,5 @@
+---
+- ufw: rule=allow
+       port=22
+       proto=tcp
+- ufw: state=enabled

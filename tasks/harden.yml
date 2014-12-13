@@ -1,0 +1,31 @@
+---
+- lineinfile: dest=/etc/security/limits.conf
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: '\* *hard *core *0', line: "*    hard    core    0" }
+    - { regexp: '\* *hard *maxlogins *10', line: "*    hard    maxlogins    10" }
+- lineinfile: dest=/etc/login.defs
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: '^PASS_MIN_LEN', line: 'PASS_MIN_LEN 14' }
+    - { regexp: 'PASS_MIN_DAYS', line: 'PASS_MIN_DAYS 1' }
+    - { regexp: 'PASS_MAX_DAYS', line: 'PASS_MAX_DAYS 60' }
+    - { regexp: 'INACTIVE', line: 'INACTIVE=35' }
+- replace: dest=/etc/securetty
+           regexp='^vc'
+- copy: src=issue
+        dest=/etc/issue
+- copy: src=disable_bluetooth.conf
+        dest=/etc/modprobe.d/bluetooth.conf
+- lineinfile: dest=/etc/modprobe.d/{{item.name}}.conf
+              line="{{item.operation|default("install")}} {{item.name}} {{item.options|default("/bin/false")}}"
+              create=yes
+  with_items:
+    - { name: "usb-storage" }
+    - { name: "ipv6", operation: "options", options: "disable=1" }
+    - { name: "dccp" }
+    - { name: "sctp" }
+    - { name: "rds" }
+    - { name: "tipc" }

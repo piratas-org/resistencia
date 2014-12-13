@@ -1,0 +1,9 @@
+---
+- service: name={{item}}
+           state=started
+           enabled=yes
+  with_items:
+    - fail2ban
+    - haveged
+    - ntp
+

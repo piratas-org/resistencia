@@ -1,0 +1,60 @@
+---
+- user: name="{{zeyple.user}}"
+        createhome=no
+        generate_ssh_key=no
+        shell=/bin/false
+- file: path="{{zeyple.keys_dir}}"
+        mode=0700
+        owner="{{zeyple.user}}"
+        state=directory
+- get_url: url="{{item.url}}"
+           dest="{{item.dest}}"
+           mode="{{item.mode}}"
+           owner="{{zeyple.user}}"
+  with_items:
+    - { url: "https://raw.github.com/infertux/zeyple/master/zeyple/zeyple.py", dest: "{{zeyple.exec}}", mode: "0755" }
+    - { url: "https://raw.github.com/infertux/zeyple/master/zeyple/zeyple.conf.example", dest: "{{zeyple.config}}", mode: "0600" }
+- shell: "gpg --homedir {{zeyple.keys_dir}} --keyserver pool.sks-keyservers.net --recv-keys {{admin.key}}"
+  sudo: yes
+  sudo_user: "{{zeyple.user}}"
+  changed_when: False
+- file: path="{{zeyple.log}}"
+        owner="{{zeyple.user}}"
+        state=touch
+  changed_when: False
+- copy: src=zeyple-logrotate
+        dest=/etc/logrotate.d/zeyple
+- command: grep -q 'zeyple unix' /etc/postfix/master.cf
+  register: zeyple_mastercf
+  ignore_errors: True
+  changed_when: False
+- lineinfile: dest="{{zeyple.config}}"
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: "^home =", line: "home = {{zeyple.keys_dir}}" }
+    - { regexp: "^host =", line: "host = 127.0.0.1" }
+- lineinfile: dest=/etc/postfix/master.cf
+              regexp="^"
+              line="zeyple unix - n n - - pipe\n user=zeyple argv=/usr/local/bin/zeyple.py ${recipient}\n\nlocalhost:10026 inet n - n - 10 smtpd\n -o content_filter=\n -o receive_override_options=no_unknown_recipient_checks,no_header_body_checks,no_milters\n -o smtpd_helo_restrictions=\n -o smtpd_client_restrictions=\n -o smtpd_sender_restrictions=\n -o smtpd_recipient_restrictions=permit_mynetworks,reject\n -o mynetworks=127.0.0.0/8\n -o smtpd_authorized_xforward_hosts=127.0.0.0/8"
+              insertafter=EOF
+  when: zeyple_mastercf|failed
+  notify: reload postfix
+- lineinfile: dest=/etc/postfix/main.cf
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+              insertafter=EOF
+  with_items:
+    - { regexp: "^recipient_canonical_maps =", line: "recipient_canonical_maps = hash:/etc/postfix/recipient_canonical" }
+    - { regexp: "^content_filter = zeyple", line: "content_filter = zeyple" }
+  notify: reload postfix
+- lineinfile: dest=/etc/postfix/recipient_canonical
+              regexp="^{{admin.internal_email}} "
+              line="{{admin.internal_email}} {{admin.email}}"
+              create=yes
+  notify: reload postfix
+  register: canonical_done
+- command: postmap /etc/postfix/recipient_canonical
+  notify: reload postfix
+  when: canonical_done.changed
+  changed_when: False

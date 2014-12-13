@@ -1,0 +1,5 @@
+---
+- name: set haveged sane defaults
+  lineinfile: dest=/etc/default/haveged
+              regexp="^DAEMON_ARGS="
+              line='DAEMON_ARGS="-w 1024"'

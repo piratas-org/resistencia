@@ -1,0 +1,9 @@
+- name: newaliases
+  shell: newaliases
+- name: reload postfix
+  shell: postfix reload
+- name: restart ssh
+  service: name=ssh
+           state=restarted
+- name: reload sysctl
+  command: sysctl -p /etc/sysctl.conf

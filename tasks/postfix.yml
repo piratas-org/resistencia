@@ -1,0 +1,5 @@
+---
+- lineinfile: dest=/etc/postfix/main.cf
+              line=inet_interfaces=localhost
+              regexp=^inet_interfaces
+  notify: reload postfix

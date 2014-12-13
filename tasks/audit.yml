@@ -1,0 +1,9 @@
+---
+- copy: src=audit.rules
+        dest=/etc/audit/audit.rules
+- lineinfile: dest=/etc/audit/auditd.conf
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: "^#*admin_space_left_action", line: "admin_space_left_action = SINGLE" }
+    - { regexp: "^#*space_left_action", line: "space_left_action = EMAIL" }

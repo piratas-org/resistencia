@@ -1,0 +1,16 @@
+---
+- shell: '[ `readlink /bin/sh` = "bash" ]'
+  register: sh_symlink
+  changed_when: False
+- shell: echo "dash dash/sh boolean false" | debconf-set-selections
+  when: sh_symlink|failed
+- shell: DEBIAN_FRONTEND=noninteractive dpkg-reconfigure dash
+  when: sh_symlink|failed
+- lineinfile: dest=/etc/profile
+              line="       umask 077"
+              regexp='^ *umask *(002|077)'
+              backup=yes
+- lineinfile: dest=/etc/bash.bashrc
+              line="       umask 077"
+              regexp='^ *umask *(002|077)'
+              backup=yes

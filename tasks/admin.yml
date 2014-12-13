@@ -1,0 +1,19 @@
+---
+- name: create admin user
+  user: name="{{admin.user}}"
+- command: grep -q 'root:!:' /etc/shadow
+  register: root_shadow
+  ignore_errors: True
+  changed_when: False
+- shell: passwd -d root
+  when: root_shadow|failed
+- shell: passwd -l root
+  when: root_shadow|failed
+- name: set admin email alias
+  lineinfile: "dest=/etc/aliases
+              regexp='^{{item}}:'
+              line='{{item}}: {{admin.email}}'"
+  notify: newaliases
+  with_items:
+    - root
+    - "{{admin.user}}"

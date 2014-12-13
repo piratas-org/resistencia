@@ -1,0 +1,7 @@
+---
+- apt: name=git
+- name: configure git
+  command: git config --global user.name "root"
+  changed_when: False
+- command: git config --global user.email "{{admin.internal_email}}"
+  changed_when: False

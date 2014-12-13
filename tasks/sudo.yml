@@ -1,0 +1,9 @@
+---
+- name: remove sudo group rights
+  lineinfile: dest=/etc/sudoers
+              regexp="^%sudo"
+              state=absent
+- name: add admin user to sudoers
+  lineinfile: "dest=/etc/sudoers
+              regexp='^{{admin.user}}'
+              line='{{admin.user}} ALL=(ALL:ALL) NOPASSWD: ALL'"

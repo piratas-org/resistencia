@@ -1,0 +1,12 @@
+---
+- lineinfile: dest=/etc/default/rcS
+              regexp='^FSCKFIX=yes'
+              line='FSCKFIX=yes'
+- lineinfile: dest=/etc/default/postfix 
+              regexp='^SYNC_CHROOT='
+              line='SYNC_CHROOT="n"'
+              create=True
+  register: postfixnochroot
+- command: postfix-nochroot
+  notify: reload postfix
+  when: postfixnochroot.changed

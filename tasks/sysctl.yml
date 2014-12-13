@@ -1,0 +1,20 @@
+---
+- lineinfile: dest=/etc/sysctl.conf
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  with_items:
+    - { regexp: "^kernel.exec-shield", line: "kernel.exec-shield = 1" }
+    - { regexp: "^kernel.randomize_va_space", line: "kernel.randomize_va_space = 2" }
+    - { regexp: "net.ipv4.conf.default.send_redirects", line: "net.ipv4.conf.default.send_redirects = 0" }
+    - { regexp: "net.ipv4.conf.all.send_redirects = 0", line: "net.ipv4.conf.all.send_redirects = 0" }
+    - { regexp: "net.ipv4.conf.all.accept_source_route", line: "net.ipv4.conf.all.accept_source_route = 0" }
+    - { regexp: "net.ipv4.conf.all.accept_redirects", line: "net.ipv4.conf.all.accept_redirects = 0" }
+    - { regexp: "net.ipv4.conf.all.secure_redirects", line: "net.ipv4.conf.all.secure_redirects = 0" }
+    - { regexp: "net.ipv4.conf.all.log_martians", line: "net.ipv4.conf.all.log_martians = 1" }
+    - { regexp: "net.ipv4.conf.default.accept_redirects", line: "net.ipv4.conf.default.accept_redirects = 0" }
+    - { regexp: "net.ipv4.conf.default.secure_redirects", line: "net.ipv4.conf.default.secure_redirects = 0" }
+    - { regexp: "net.ipv4.icmp_echo_ignore_broadcasts", line: "net.ipv4.icmp_echo_ignore_broadcasts = 1" }
+    - { regexp: "net.ipv4.icmp_ignore_bogus_error_responses", line: "net.ipv4.icmp_ignore_bogus_error_responses = 1" }
+    - { regexp: "net.ipv4.conf.all.rp_filter", line: "net.ipv4.conf.all.rp_filter = 1" }
+    - { regexp: "net.ipv6.conf.default.accept_redirects", line: "net.ipv6.conf.default.accept_redirects = 0" }
+  notify: reload sysctl

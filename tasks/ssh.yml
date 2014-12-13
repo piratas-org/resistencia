@@ -1,0 +1,17 @@
+---
+- command: creates=/root/.ssh/authorized_keys.bck mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.bck
+- name: disallow SSH unsafe options
+  lineinfile: dest=/etc/ssh/sshd_config
+              regexp="{{item.regexp}}"
+              line="{{item.line}}"
+  notify: restart ssh
+  with_items:
+    - { regexp: "^PermitRootLogin", line: "PermitRootLogin no" }
+    - { regexp: "^PasswordAuthentication", line: "PasswordAuthentication no" }
+    - { regexp: "^UseDNS", line: "UseDNS no" }
+    - { regexp: "^Banner /etc/issue", line: "Banner /etc/issue" }
+    - { regexp: "^PermitEmptyPasswords", line: "PermitEmptyPasswords no" }
+    - { regexp: "^ClientAliveCountMax", line: "ClientAliveCountMax 0" }
+    - { regexp: "^ClientAliveInterval", line: "ClientAliveInterval 900" }
+    - { regexp: "^Ciphers", line: "Ciphers aes128-ctr,aes192-ctr,aes256-ctr,aes128-cbc,3des-cbc,aes192-cbc,aes256-cbc" }
+    - { regexp: "^PermitUserEnvironment", line: "PermitUserEnvironment no" }
