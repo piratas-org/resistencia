@@ -9,7 +9,6 @@
               regexp="{{item.regexp}}"
               line="{{item.line}}"
   with_items:
-    - { regexp: '^PASS_MIN_LEN', line: 'PASS_MIN_LEN 14' }
     - { regexp: 'PASS_MIN_DAYS', line: 'PASS_MIN_DAYS 1' }
     - { regexp: 'PASS_MAX_DAYS', line: 'PASS_MAX_DAYS 60' }
     - { regexp: 'INACTIVE', line: 'INACTIVE=35' }
