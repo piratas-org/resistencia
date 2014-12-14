@@ -11,6 +11,18 @@ If you want to collaborate: fork, change, pull request, repeat. All contribution
 
 This is a [Confederación Pirata](http://confederacionpirata.org) project.
 
+Features
+--------
+
+* Encrypted administration e-mails (logwatch).
+* File system monitorization with rkhunter.
+* /etc monitoring and managing with etckeeper.
+* [Haveged](https://wiki.archlinux.org/index.php/Haveged), entropy daemon, up and running for unpredictable random number generator based upon an adaptation of the HAVEGE algorithm.
+* SELinux and Linux Auditing System properly configured.
+* Set up to meet requirements from Security Content Automation Protocol (SCAP, see https://fedorahosted.org/scap-security-guide/).
+* SSH with sane defaults.
+* Unattended updates.
+
 Usage
 -----
 
