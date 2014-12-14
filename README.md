@@ -15,7 +15,7 @@ Usage
 -----
 
     # mkdir -p myserver.example.com/roles
-    # cat > myserver.example.com/site.yml <<EOF
+    # cat > myserver.example.com/localhost <<EOF
     127.0.0.1 ansible_connection=local
     EOF
     # cat > myserver.example.com/site.yml <<EOF
