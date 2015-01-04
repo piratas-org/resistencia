@@ -1,5 +1,7 @@
 ---
 - command: creates=/root/.ssh/authorized_keys.bck mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.bck
+  ignore_errors: True
+  changed_when: False
 - name: disallow SSH unsafe options
   lineinfile: dest=/etc/ssh/sshd_config
               regexp="{{item.regexp}}"

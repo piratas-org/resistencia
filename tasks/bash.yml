@@ -1,5 +1,6 @@
 ---
 - shell: '[ `readlink /bin/sh` = "bash" ]'
+  ignore_errors: True
   register: sh_symlink
   changed_when: False
 - shell: echo "dash dash/sh boolean false" | debconf-set-selections

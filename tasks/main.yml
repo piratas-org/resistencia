@@ -2,7 +2,12 @@
 - lineinfile: dest=/tmp/resistencia.firstrun
               regexp="ok"
               line="ok"
+              create=yes
   register: firstrun
+- shell: grep -E "^vagrant:" /etc/shadow
+  ignore_errors: yes
+  register: under_vagrant
+  changed_when: False
 - hostname: name="{{hostname}}"
 - include: sysctl.yml
 - include: apt.yml
@@ -32,11 +37,14 @@
 - include: harden.yml
 - include: audit.yml
 - include: rkhunter.yml
+  when: under_vagrant|failed
 - include: logwatch.yml
+  when: under_vagrant|failed
 - include: haveged.yml
 - include: bash.yml
 - include: ssh.yml
 - include: postfix.yml
 - include: zeyple.yml
+  when: under_vagrant|failed
 - include: selinux.yml
 - include: services.yml

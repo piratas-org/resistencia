@@ -1,6 +1,7 @@
 ---
-- name: isntall unattended-upgrades
+- name: install unattended-upgrades
   apt: name=unattended-upgrades
+       update_cache=yes
 - copy: src=apt.conf-06suggested
         dest=/etc/apt/apt.conf.d/06suggested
 - name: config unattended-upgrades to install from {{debian_release}}-security
