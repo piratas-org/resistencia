@@ -1,5 +1,7 @@
 ---
 debian_release: "{{ansible_distribution_release}}"
+ssl: { certificate: '' }
+timezone: 'Europe/Madrid'
 zeyple: { keys_dir: /etc/zeyple/keys,
           exec: /usr/local/bin/zeyple.py,
           config: /etc/zeyple.conf,

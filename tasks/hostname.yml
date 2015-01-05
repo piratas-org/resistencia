@@ -1,0 +1,6 @@
+---
+- hostname: name="{{hostname}}"
+- lineinfile: dest=/etc/hosts
+              regexp="^127.0.0.1.*localhost$"
+              line="127.0.0.1        localhost {{hostname}}"
+  when: under_vagrant|success
