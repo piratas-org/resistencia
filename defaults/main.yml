@@ -1,6 +1,7 @@
 ---
 debian_release: "{{ansible_distribution_release}}"
-ssl: { certificate: '' }
+ssl: { certificate: '/etc/ssl/certs/ssl-cert-snakeoil.pem',
+       key: '/etc/ssl/private/ssl-cert-snakeoil.key' }
 timezone: 'Europe/Madrid'
 zeyple: { keys_dir: /etc/zeyple/keys,
           exec: /usr/local/bin/zeyple.py,
