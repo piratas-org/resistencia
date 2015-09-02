@@ -20,20 +20,22 @@
     - selinux-basics
     - selinux-policy-default
     - auditd
-    - fail2ban
     - logwatch
     - rkhunter
-    - ufw
+    - screen
+- apt: name="{{item}}"
+  with_items:
+    - postfix
+    - fail2ban
     - haveged
+    - ufw
     - ntp
     - ntpdate
-    - gnupg2
-    - python-gpgme
-    - postfix
-    - screen
+  when: is_full_host
 - include: admin.yml
 - include: sudo.yml
 - include: firewall.yml
+  when: is_full_host
 - include: harden.yml
 - include: audit.yml
 - include: rkhunter.yml
@@ -41,10 +43,13 @@
 - include: logwatch.yml
   when: under_vagrant|failed
 - include: haveged.yml
+  when: is_full_host
 - include: bash.yml
 - include: ssh.yml
+  when: has_ssh
 - include: postfix.yml
+  when: is_full_host
 - include: zeyple.yml
-  when: under_vagrant|failed
+  when: under_vagrant|failed and admin.key and is_full_host
 - include: selinux.yml
 - include: services.yml

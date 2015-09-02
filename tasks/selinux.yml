@@ -7,6 +7,7 @@
               line='SYNC_CHROOT="n"'
               create=True
   register: postfixnochroot
+  when: is_full_host
 - command: postfix-nochroot
   notify: reload postfix
-  when: postfixnochroot.changed
+  when: postfixnochroot.changed and is_full_host

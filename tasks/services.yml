@@ -6,4 +6,4 @@
     - fail2ban
     - haveged
     - ntp
-
+  when: is_full_host

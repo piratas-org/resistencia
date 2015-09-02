@@ -8,3 +8,5 @@ zeyple: { keys_dir: /etc/zeyple/keys,
           config: /etc/zeyple.conf,
           log: /var/log/zeyple.log,
           user: zeyple }
+has_ssh: true
+is_full_host: true

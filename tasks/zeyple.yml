@@ -1,4 +1,8 @@
 ---
+- apt: name="{{item}}"
+  with_items:
+    - gnupg2
+    - python-gpgme
 - user: name="{{zeyple.user}}"
         createhome=no
         generate_ssh_key=no
