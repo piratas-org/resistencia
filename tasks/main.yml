@@ -9,6 +9,7 @@
   register: under_vagrant
   changed_when: False
 - include: hostname.yml
+  when: is_full_host
 - include: sysctl.yml
 - include: apt.yml
 - include: git.yml
@@ -18,7 +19,6 @@
     - vim-nox
     - sudo
     - selinux-basics
-    - selinux-policy-default
     - auditd
     - logwatch
     - rkhunter
@@ -50,6 +50,6 @@
 - include: postfix.yml
   when: is_full_host
 - include: zeyple.yml
-  when: under_vagrant|failed and admin.key and is_full_host
+  when: "{{'key' in admin and is_full_host and under_vagrant|failed}} == true"
 - include: selinux.yml
 - include: services.yml

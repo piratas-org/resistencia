@@ -2,9 +2,12 @@
 - apt: name="{{item}}"
   with_items:
     - openssh-server
+- stat: path=/root/.ssh/authorized_keys
+  register: root_authkeys
 - command: creates=/root/.ssh/authorized_keys.bck mv /root/.ssh/authorized_keys /root/.ssh/authorized_keys.bck
   ignore_errors: True
   changed_when: False
+  when: root_authkeys.stat.exists
 - name: disallow SSH unsafe options
   lineinfile: dest=/etc/ssh/sshd_config
               regexp="{{item.regexp}}"
